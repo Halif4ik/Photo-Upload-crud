@@ -5,6 +5,8 @@ import * as path from 'node:path';
 import {PrismaService} from "./prisma.service";
 import {FileService} from "./file.service";
 import { UserModule } from './user/user.module';
+import {TransformResponseInterceptor} from "./interceptor/response.interceptor";
+import {APP_INTERCEPTOR} from "@nestjs/core";
 
 @Module({
    imports: [ConfigModule.forRoot({
@@ -15,7 +17,11 @@ import { UserModule } from './user/user.module';
          rootPath: path.join(__dirname, '../public'),
       }),
       UserModule,],
-   providers: [PrismaService, FileService],
+   providers: [PrismaService, FileService,
+      {
+         provide: APP_INTERCEPTOR,
+         useClass: TransformResponseInterceptor,
+      }],
 })
 export class AppModule {
 }
