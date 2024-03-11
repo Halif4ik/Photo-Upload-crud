@@ -19,7 +19,7 @@ model User {
   dateMode   Boolean  @default(false)
   name       String
   job        String
-  image      String
+  image      String?
   bio        String?
   linkedIn   String?
   instagram  String?

@@ -37,18 +37,10 @@ export class UserController {
    @ApiOperation({summary: 'Created User in database'})
    @UseInterceptors(FileInterceptor('image'))
    @UsePipes(new ValidationPipe({transform: true, whitelist: true}))
-   createUser(@Body() createUserDto: CreateUserDto, @UploadedFile(
-       new ParseFilePipe({
-          validators: [
-             new MaxFileSizeValidator({
-                maxSize: 1024 * 1024 * +process.env.MAX_FILE_SIZE_MB,
-             }),
-             new FileTypeValidator({fileType: 'image/jpeg'}),
-          ],
-       }),
-   ) file: Express.Multer.File): Promise<User> {
-      return this.userService.createUser(createUserDto, [file]);
+   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+      return this.userService.createUser(createUserDto);
    }
+
 
    //2.test endpoint
    //Endpoint: Post /api/user/createTest

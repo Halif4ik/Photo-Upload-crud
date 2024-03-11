@@ -4,7 +4,6 @@ import {FileElementResponse, FileService} from "../file.service";
 import {PrismaService} from "../prisma.service";
 import {ConfigService} from "@nestjs/config";
 import {User} from "@prisma/client";
-import {CreateUserDtoTest} from "./dto/create-user-test.dto";
 
 @Injectable()
 export class UserService {
@@ -14,7 +13,7 @@ export class UserService {
                private prisma: PrismaService, private readonly configService: ConfigService) {
    }
 
-   async createUser(createUserDto: CreateUserDto, images: Express.Multer.File[]): Promise<User> {
+   async createUser(createUserDto: CreateUserDto): Promise<User> {
       const userInDB: User | null = await this.prisma.user.findUnique({
          where: {
             deviceId: createUserDto.id,
@@ -23,7 +22,7 @@ export class UserService {
       if (userInDB)
          throw new HttpException('User with this device id already exist in db', HttpStatus.CONFLICT);
 
-      const fileSaved: FileElementResponse = await this.fileService.createFile(images);
+      const fileSaved: FileElementResponse = await this.fileService.createFile(createUserDto.image);
 
       const newUser: User = await this.prisma.user.create({
          data: {
@@ -49,9 +48,4 @@ export class UserService {
       return newUser
    }
 
-   async createUserTest( createUserDto: CreateUserDtoTest): Promise<any> {
-
-      console.log(`SErvice- `,createUserDto);
-      return 'newUser'
-   }
 }

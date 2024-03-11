@@ -25,8 +25,8 @@ import * as bodyParser from 'body-parser';
     methods: 'POST,GET,PATCH,DELETE',
     credentials: true, // Enable cookies and authentication headers
   };
-  app.use(bodyParser.json({ limit: '20mb' }));
-  app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }));
+  app.use(bodyParser.json({ limit: '8mb' }));
+  app.use(bodyParser.urlencoded({ limit: '8mb', extended: true }));
 
   app.enableCors(corsOptions);
   app.setGlobalPrefix('api')

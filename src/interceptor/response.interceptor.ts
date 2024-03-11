@@ -10,13 +10,20 @@ export class TransformResponseInterceptor<T> implements NestInterceptor<T, ApiRe
           catchError((error) => {
              // Обработка ошибок
              const status = error instanceof HttpException ? error.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
-             console.log('error-',error);
+             let errorMessage = 'Internal Server Error'; // Default error message
+
+             if (error instanceof HttpException && error.getResponse() && error.getResponse()['message']) {
+                // Extract error messages from BadRequestException
+                errorMessage = error.getResponse()['message'];
+             }
+
+             console.log('error-', error);
 
              return throwError(() => {
                 throw new HttpException(
                     {
                        success: false,
-                       errors_message: error.message,
+                       errors_message: errorMessage,
                        data: null,
                     },
                     status,
